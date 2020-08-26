@@ -1,24 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
+import Table from "./Table";
 
 function App() {
+  const [appState, setAppState] = useState({
+    data: []
+  });
+
+  useEffect(() => {
+    const apiUrl = 'https://flickr-feed-backend.herokuapp.com/api/v1/photo';
+    axios.get(apiUrl).then((response) => {
+      setAppState({
+        data: response.data.data
+      })
+    });
+  }, [setAppState]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Table data={appState.data} />
     </div>
   );
 }
